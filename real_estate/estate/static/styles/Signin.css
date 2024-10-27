@@ -1,0 +1,123 @@
+body, html {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f4f4f4;
+}
+
+.login-container {
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 410px;
+    position: relative;
+    margin: auto;
+}
+
+.login-container h1 {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.login-form h3 {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 22px;
+    color: #333;
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+input[type=email], input[type=password] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    margin-bottom: 20px;
+    color: #0056b3;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.continue-button, .sso-button {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-left: 50px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.continue-button {
+    background-color: #0056b3;
+    color: white;
+}
+
+.sso-button {
+    background-color: transparent;
+    color:#1e4de8;
+    font-size: 15px;
+   
+}
+
+.sign-up, .footer-links {
+    text-align: center;
+    margin-top: 20px;
+}
+.sign-up a{
+color: #0056b3;
+}
+.sign-up {
+    color: #4F566B;
+}
+.footer-links {
+    font-size: 16px;
+    color: #697386;
+   
+}
+
+
+/* Adjust footer to be at the bottom of the page */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 10px 0;
+}
+

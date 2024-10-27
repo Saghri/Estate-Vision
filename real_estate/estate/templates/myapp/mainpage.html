@@ -1,0 +1,220 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Days+One&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Style Link -->
+    <link rel="stylesheet" href="{% static 'styles/mainpage_style.css' %}" />
+    <!--bootstrap link-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <!--font Awesome cdn link-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <title>Estate Vision</title>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav>
+      <div class="nav-logo">
+        <img src="{% static 'images/EV_logo.svg' %}" alt="Logo" />
+        <h3>Estate Vision</h3>
+      </div>
+      <div class="nav-list">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="button-container">
+       <a href="{% url 'admin_signin' %}"><button class="button admin-login">Admin Login</button></a>
+       <a href="{% url 'signup' %}"> <button class="button sign-up">Sign Up</button></a>
+       <a href="{% url 'signin' %}"> <button class="button login">Login</button></a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Unlock Your Data Potential</h1>
+        <p>Transform insights into action with RealInsight's powerful tools.</p>
+        <a href="{% url 'signin' %}" class="cta-button">Start for Free</a>
+      </div>
+    </section>
+    <!--features Section-->
+    <div class="features-container">
+      <div class="features-header">Features</div>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-title">Top Intelligence</div>
+          <div class="feature-description">
+            Provides insights with AI-driven real estate analytics to enhance
+            decision- <br />making.
+          </div>
+          <div class="feature-quote">
+            "This feature revolutionized our market strategy!" - John D.
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Creative App</div>
+          <div class="feature-description">
+            User-friendly app offering comprehensive data visualization for real
+            estate <br />trends.
+          </div>
+          <div class="feature-quote">
+            "The app's design is intuitive and powerful." - Sarah L.
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Smart Campaigns</div>
+          <div class="feature-description">
+            Automated marketing campaigns tailored to real estate needs.
+          </div>
+          <div class="feature-quote">
+            "Our reach expanded significantly." - Michael T.
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Marketing Reports</div>
+          <div class="feature-description">
+            Detailed reports on real estate performance and market trends.
+          </div>
+          <div class="feature-quote">
+            "Invaluable insights every month." - Emily R.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--user reviews-->
+    <div class="awesome-user-heading">
+      <h3>Hear from our awesome users!</h3>
+    </div>
+    <div class="testimonial-container">
+        <div class="testimonial">
+            <img src="{% static 'images/user2.png' %}" alt="Emily Johnson">
+            <div class="testimonial-details">
+                <div class="testimonial-title">Emily Johnson, <br> CEO</div>
+                <div class="testimonial-stars">★★★★★</div>
+                <div class="testimonial-text">Realinsight transformed our business <br> with incredible insights.</div>
+            </div>
+        </div>
+        <div class="testimonial">
+            <img src="{% static 'images/user1.png' %}" alt="Michael Smith">
+            <div class="testimonial-details">
+                <div class="testimonial-title">Michael Smith, <br>Director</div>
+                <div class="testimonial-stars">★★★★★</div>
+                <div class="testimonial-text">The service is unparalleled in delivering <br>actionable data.</div>
+            </div>
+        </div>
+        <div class="testimonial">
+            <img src="{% static 'images/user2.png' %}" alt="Sophia Lee">
+            <div class="testimonial-details">
+                <div class="testimonial-title">Sophia Lee,<br> Manager</div>
+                <div class="testimonial-stars">★★★★★</div>
+                <div class="testimonial-text">Outstanding experience! Highly <br> recommend Realinsight.</div>
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <div class="button"><i class="fas fa-chevron-left"></i></div>
+        <div class="button"><i class="fas fa-chevron-right"></i></div>
+    </div>
+
+    <!---fame astro -->
+
+    <header>
+      <h1>Explore Fame_Astro</h1>
+      <p>Discover the fascinating world of astrology and get personalized insights by installing Fame_Astro  <br>today.</p>
+      <button class="explore-btn">Explore</button>
+  </header> 
+<div class="new_letter">
+  <div class="header">
+    <img src="{% static 'images/EV_logo.svg' %}" alt="RealDemo Logo" style="height: 50px;">
+    <h1 class="demo-text">Estate Vision</h1>
+</div>
+<br> 
+<div class="newsletter">
+  <h2 class="news-btn">Subscribe to our newsletter</h2>
+  <div class="email-form">
+    <img src="{% static 'images/Main.png' %}" alt="" class="mail-image">
+       <input type="email" placeholder="Input your email"> 
+      
+      <button>Subscribe</button>
+  </div>
+</div>
+<br> 
+<footer>
+  <div class="footer-top">
+      <div class="footer-column">
+          <h3>Product</h3>
+          <ul>
+              <li>Features</li>
+              <li>Pricing</li>
+          </ul>
+      </div>
+      <div class="footer-column">
+          <h3>Resources</h3>
+          <ul>
+              <li>Blog</li>
+              <li>User guides</li>
+              <li>Webinars</li>
+          </ul>
+      </div>
+      <div class="footer-column">
+          <h3>Company</h3>
+          <ul>
+              <li>About us</li>
+              <li>Contact us</li>
+          </ul>
+      </div>
+      <div class="footer-column">
+          <h3>Plans & Pricing</h3>
+          <ul>
+              <li>Personal</li>
+              <li>Start up</li>
+              <li>Organization</li>
+          </ul>
+      </div>
+  </div>
+  <div class="footer-bottom">
+      <select>
+          <option>English</option>
+          <option>Spanish</option>
+          <option>French</option>
+      </select>
+      <p>&copy; 2024 Brand, Inc. - Privacy - Terms - Sitemap</p>
+      <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-twitter" style="color: #0255e3;"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook" style="color: #095cec;"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin" style="color: #0055ff;"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube" style="color: #db0a0a;"></i></a>
+      </div>
+  </div>
+</footer>
+
+  </body>
+</html>

@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/Admin.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <title>Admin Sign In - Estate Vision</title>
+    <style>
+        /* CSS will be defined in the style section below */
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% comment %} <h1 class="brand">Estate Vision</h1> {% endcomment %}
+        <div class="form-container">
+            <h2>Admin Sign in</h2>
+            <form>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="jane.doe@gmail.com" required>
+                </div>
+                <div class="input-group password-group">
+                    <label for="password">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" placeholder="•••••••••" required>
+                        <span class="toggle-password" onclick="togglePasswordVisibility('password')">👁️</span>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot your password?</a>
+                </div>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="stay-signed-in">
+                    <label for="stay-signed-in">Stay signed in for a week</label>
+                </div>
+                <button type="submit" class="continue-button">Continue</button>
+                <button type="button" class="sso-button">Use single sign-on (SSO) instead</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-links">
+        <p>Don’t have an account? <a href="#">Sign up</a></p>
+        <footer>
+            © Estate Vision · <a href="#">Contact</a> · <a href="#">Privacy & terms</a>
+        </footer>
+    </div>
+    <script>
+        function togglePasswordVisibility(id) {
+            var input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+</body>
+</html>
