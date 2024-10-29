@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estate Vision - Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      /* Main Styles */
+      body,
+      html {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      .container {
+        width: 400px;
+        position: relative;
+        margin-top: 40px;
+      }
+      .brand {
+        position: absolute;
+        top: -55px;
+        left: 0;
+        font-size: 20px;
+        font-weight: 500;
+        color: #333;
+      }
+      .form-container {
+        background: #ffffff;
+        padding: 30px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .form-container h2 {
+        text-align: left;
+        font-size: 24px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .input-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #666;
+      }
+      input[type='text'],
+      input[type='email'],
+      input[type='password'] {
+        width: 90%;
+        padding: 10px 40px 10px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      .mic{
+        position: absolute;
+      }
+      button {
+        width: 100%;
+        background-color: #0056b3;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 10px;
+      }
+      .footer-links {
+        width: 400px;
+        text-align: center;
+        margin-top: 40px;
+      }
+      .footer-links p {
+        font-size: 14px;
+        margin: 10px 0;
+      }
+      .footer-links a {
+        color: #0056b3;
+        text-decoration: none;
+      }
+      .footer-links a:hover {
+        text-decoration: underline;
+      }
+      .voice-input-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #666;
+        font-size: 20px;
+        background: #f4f4f4;
+        border-radius: 50%;
+        padding: 5px;
+        transition: background 0.3s;
+      }
+      .voice-input-icon:hover {
+        background: #ddd;
+      }
+      .voice-input-icon svg {
+        fill: #666;
+        width: 18px;
+        height: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="brand">Estate Vision</div>
+      <div class="form-container">
+        <h2>Register</h2>
+        <form method="POST" action="{% url 'Signup' %}">
+          {% csrf_token %}
+          <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required />
+            <div class="voice-input-icon" onclick="startVoiceInput('username')">
+              <svg class="mic" viewBox="0 0 24 24">
+                <path d="M12 14a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 14zM19 10.5a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08a7 7 0 0 0 6-6.92z" />
+              </svg>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+            <div class="voice-input-icon" onclick="startVoiceInput('email')">
+              <svg class="mic" viewBox="0 0 24 24">
+                <path d="M12 14a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 14zM19 10.5a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08a7 7 0 0 0 6-6.92z" />
+              </svg>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="password1">Password</label>
+            <input type="password" id="password1" name="password1" required />
+            <div class="voice-input-icon" onclick="startVoiceInput('password1')">
+              <svg class="mic" viewBox="0 0 24 24">
+                <path d="M12 14a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 14zM19 10.5a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08a7 7 0 0 0 6-6.92z" />
+              </svg>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="password2">Confirm Password</label>
+            <input type="password" id="password2" name="password2" required />
+            <div class="voice-input-icon" onclick="startVoiceInput('password2')">
+              <svg class="mic" viewBox="0 0 24 24">
+                <path d="M12 14a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 14zM19 10.5a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08a7 7 0 0 0 6-6.92z" />
+              </svg>
+            </div>
+          </div>
+          <button type="submit">Register</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-links">
+      <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+      <p><a href="#">Forgot Password?</a></p>
+    </div>
+    <script>
+        function startVoiceInput(inputId) {
+          const inputField = document.getElementById(inputId)
+          const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)()
+        
+          recognition.lang = 'en-US'
+          recognition.interimResults = false
+          recognition.maxAlternatives = 1
+        
+          recognition.start()
+        
+          recognition.onresult = function (event) {
+            let transcript = event.results[0][0].transcript.toLowerCase() // Convert text to lowercase
+            transcript = transcript.replace(/\.$/, '') // Remove any trailing period
+            inputField.value = transcript
+          }
+        
+          recognition.onerror = function (event) {
+            console.error('Error occurred in recognition: ' + event.error)
+          }
+        }
+      </script>
+  </body>
+</html>

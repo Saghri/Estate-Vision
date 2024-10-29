@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/Logout.css' %}">
+    <title>Estate Vision - Logout</title>
+</head>
+<body>
+    <div class="logout-container">
+        <h1>Estate Vision</h1>
+        <div class="logout-form">
+            <h3>Are you sure you want to logout?</h3>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Logout</button>
+                <a href="{% url 'home' %}" class="cancel-button">Cancel</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

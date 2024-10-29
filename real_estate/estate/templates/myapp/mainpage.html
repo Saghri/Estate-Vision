@@ -38,21 +38,21 @@
     <!-- Navigation Bar -->
     <nav>
       <div class="nav-logo">
-        <img src="{% static 'images/EV_logo.svg' %}" alt="Logo" />
+        {% comment %} <img src="{% static 'images/EV_logo.svg' %}" alt="Logo" /> {% endcomment %}
         <h3>Estate Vision</h3>
       </div>
       <div class="nav-list">
         <ul>
           <li><a href="#">Home</a></li>
-          <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          {% comment %} <li><a href="{% url 'dashboard' %}">Dashboard</a></li> {% endcomment %}
           <li><a href="#">About Us</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
       </div>
       <div class="button-container">
-       <a href="{% url 'admin_signin' %}"><button class="button admin-login">Admin Login</button></a>
-       <a href="{% url 'signup' %}"> <button class="button sign-up">Sign Up</button></a>
-       <a href="{% url 'signin' %}"> <button class="button login">Login</button></a>
+       <a href="admin/"><button class="button admin-login">Admin Login</button></a>
+       {% comment %} <a href="{% url 'signup' %}"> <button class="button sign-up">Sign Up</button></a> {% endcomment %}
+       <a href="{% url 'login' %}"> <button class="button login">Login</button></a>
       </div>
     </nav>
 
@@ -61,7 +61,8 @@
       <div class="hero-content">
         <h1>Unlock Your Data Potential</h1>
         <p>Transform insights into action with RealInsight's powerful tools.</p>
-        <a href="{% url 'signin' %}" class="cta-button">Start for Free</a>
+        <a href="#" class="cta-button">Start for Free</a>
+        {% comment %} <a href="{% url 'login' %}" class="cta-button">Start for Free</a> {% endcomment %}
       </div>
     </section>
     <!--features Section-->

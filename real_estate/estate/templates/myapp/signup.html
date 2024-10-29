@@ -8,16 +8,15 @@
     <link rel="stylesheet" href="{% static 'styles/signup.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <title>Sign Up - Estate Vision</title>
-    <style>
-        /* CSS will be defined in the style section below */
-    </style>
 </head>
 <body>
     <div class="container">
         <h1 class="brand">Estate Vision</h1>
         <div class="form-container">
             <h2>Sign up to your account</h2>
-            <form>
+            {% comment %} <form onsubmit="event.preventDefault(); signup();"> {% endcomment %}
+            <form method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
                 <div class="input-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="jane.doe@gmail.com" required>
@@ -26,31 +25,58 @@
                     <label for="password">Password</label>
                     <div class="password-container">
                         <input type="password" id="password" name="password" placeholder="•••••••••" required>
-                        <span class="toggle-password" onclick="togglePasswordVisibility('password')">👁️</span>
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="confirm-password">Confirm Password</label>
                     <div class="password-container">
                         <input type="password" id="confirm-password" name="confirm-password" placeholder="•••••••••" required>
-                        <span class="toggle-password" onclick="togglePasswordVisibility('confirm-password')">👁️</span>
                     </div>
                 </div>
-                <button type="submit">Continue</button>
+                <button type="submit">SignUp</button>
             </form>
         </div>
     </div>
     <div class="footer-links">
-        <p>Already have an account? <a href="#">Sign In</a></p>
+        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
         <footer>
             © Estate Vision · <a href="#">Contact</a> · <a href="#">Privacy & terms</a>
         </footer>
     </div>
+    
     <script>
-        function togglePasswordVisibility(id) {
+        /*function togglePasswordVisibility(id) {
             var input = document.getElementById(id);
             input.type = input.type === 'password' ? 'text' : 'password';
+        }*/
+
+        async function hashPassword(password) {
+            const msgUint8 = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        async function signup() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            const hashedPassword = await hashPassword(password);
+            const user = { email: email, password: hashedPassword };
+
+            localStorage.setItem(email, JSON.stringify(user));
+            alert("Signup successful! Please log in.");
+            window.location.href = "/myapp/sign-in/";
         }
     </script>
+    <script src="{% static 'script/auth.js' %}"></script>
+
 </body>
-</html>
+</html> */

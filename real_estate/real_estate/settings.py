@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -89,12 +90,23 @@ DATABASES = {
 #         'HOST': 'localhost',
 #         'PORT': '3306',
 #         'OPTIONS': {
-#     'ssl': {'require': False},  # Disable SSL entirely
-#     'init_command': "SET SESSION sql_mode='STRICT_TRANS_TABLES'",
-#     }
-
+#             'ssl': {
+#                 'ca': '/path/to/ca-cert.pem',
+#                 'cert': '/path/to/client-cert.pem',
+#                 'key': '/path/to/client-key.pem',
+#             },
+#         },
 #     }
 # }
+
+
+# Email Settings
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'jamalsaghri@gmail.com'
+# EMAIL_HOST_PASSWORD = 'jamal12345'
 
 
 # Password validation
@@ -134,7 +146,17 @@ USE_TZ = True
 # settings.py
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+# STATICFILES_DIRS = [BASE_DIR / 'static']
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+
+LOGIN_REDIRECT_URL = 'user_dashboard'
+
+# AUTHENTICATION_BACKENDS = ['estate.backends.EmailAuthBackend', 'django.contrib.auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = ['estate.backends.EmailAuthBackend', 'django.contrib.auth.backends.ModelBackend']
 
 
 # Default primary key field type
