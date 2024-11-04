@@ -408,7 +408,7 @@ font-family: 'Days One', sans-serif;
 footer */
 footer {
     font-family: 'Roboto', sans-serif;
-    
+    background-color: #fbf8f8;
     padding: 20px 50px;
     color: #333;
     font-size: 14px;
