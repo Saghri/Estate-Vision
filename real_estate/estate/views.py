@@ -124,18 +124,216 @@ class ProtectedView(LoginRequiredMixin, View):
 # -------------------------------------------------------
 
 
-# def index(request):
-#     return render(request, 'myapp/mainpage.html')
+# # views.py
+# import pandas as pd
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# import json
 
-# def signup(request):
-#     return render(request, 'myapp/signup.html')
+# @csrf_exempt
+# def upload_csv(request):
+#     if request.method == 'POST' and request.FILES.get('csv_file'):
+#         csv_file = request.FILES['csv_file']
+#         df = pd.read_csv(csv_file)
+#         # 
+#         # Process the data and generate default graphs
+#         columns = df.columns.tolist()
+#         default_graphs = generate_default_graphs(df)
+#         quick_analysis = generate_quick_analysis(df)
+        
+#         # Save the DataFrame to the session or database for further analysis
+#         request.session['df'] = df.to_json()
+        
+#         return JsonResponse({
+#             'success': True,
+#             'columns': columns,
+#             'default_graphs': default_graphs,
+#             'quick_analysis': quick_analysis
+#         })
+#     return JsonResponse({'success': False})
 
-# def login(request):
-#     return render(request, 'myapp/Login.html')
+# @csrf_exempt
+# def analyze(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+#         algorithm = data.get('algorithm')
+#         graphs = data.get('graphs')
+        
+#         # Retrieve the DataFrame from the session or database
+#         df = pd.read_json(request.session.get('df'))
+        
+#         # Perform analysis based on the selected algorithm and graph types
+#         analysis_results = perform_analysis(df, algorithm, graphs)
+        
+#         return JsonResponse({
+#             'success': True,
+#             'graphs': analysis_results
+#         })
+#     return JsonResponse({'success': False})
 
-# def dashboard(request):
-#     return render(request, 'myapp/Dashboard.html')
+# @csrf_exempt
+# def generate_report(request):
+#     if request.method == 'GET':
+#         # Retrieve the DataFrame and analysis results
+#         df = pd.read_json(request.session.get('df'))
+        
+#         # Generate a comprehensive report
+#         report = generate_comprehensive_report(df)
+        
+#         return JsonResponse({
+#             'success': True,
+#             'report': report
+#         })
+#     return JsonResponse({'success': False})
 
-# def admin_login(request):
-#     return render(request, 'myapp/admin_login.html')
+# # Helper functions for data analysis and visualization
+# def generate_default_graphs(df):
+#     # Implement logic to generate default graphs based on the dataset
+#     pass
 
+# def generate_quick_analysis(df):
+#     # Implement logic to generate quick analysis results
+#     pass
+
+# def perform_analysis(df, algorithm, graphs):
+#     # Implement logic to perform analysis based on the selected algorithm and graph types
+#     pass
+
+# def generate_comprehensive_report(df):
+#     # Implement logic to generate a comprehensive report based on the analysis
+#     pass
+
+# ----------------------------------------------------
+
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import pandas as pd
+import json
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import LabelEncoder
+import matplotlib.pyplot as plt
+import seaborn as sns
+import io
+import base64
+import matplotlib
+matplotlib.use('Agg')  # Set non-GUI backend for matplotlib
+
+def dashboard(request):
+    return render(request, 'myapp/user_dashboard.html')
+
+@csrf_exempt
+def analyze_data(request):
+    if request.method == 'POST':
+        file = request.FILES['file']
+        algorithm = request.POST.get('algorithm')
+        
+        # Read CSV file
+        df = pd.read_csv(file)
+        
+        # Display top 5 records for user review
+        top_records = df.head(5).to_json(orient='records')
+        
+        # Prepare data
+        le_property = LabelEncoder()
+        le_location = LabelEncoder()
+        df['Property Type'] = le_property.fit_transform(df['Property Type'])
+        df['Location'] = le_location.fit_transform(df['Location'])
+        
+        # Features and target variable
+        X = df[['Property Type', 'Age', 'Location']]
+        y = df['Sale Price']
+        
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        # Select and apply algorithm
+        if algorithm == 'linear_regression':
+            model = LinearRegression()
+        elif algorithm == 'decision_tree':
+            model = DecisionTreeRegressor()
+        elif algorithm == 'random_forest':
+            model = RandomForestRegressor()
+        else:
+            return JsonResponse({'error': 'Invalid algorithm'})
+        
+        model.fit(X_train, y_train)
+        accuracy = model.score(X_test, y_test)
+        
+        # Generate predictions for visualization
+        predictions = model.predict(X_test[:10])
+        actual = y_test[:10].tolist()
+        
+        # Generate analysis plots
+        analysis_images = generate_analysis_charts(df, le_property, le_location)
+        
+        result = {
+            'algorithm': algorithm,
+            'accuracy': accuracy,
+            'predictions': predictions.tolist(),
+            'actual': actual,
+            'top_records': json.loads(top_records),
+            'analysis_images': analysis_images  # Contains base64-encoded charts
+        }
+        
+        return JsonResponse(result)
+    
+    return JsonResponse({'error': 'Invalid request method'})
+
+def generate_analysis_charts(df, le_property, le_location):
+    # Function to generate charts and return their base64 representations
+    charts = []
+    
+    # Chart 1: Distribution of Property Types
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.countplot(data=df, x='Property Type', ax=ax)
+    # Set x-axis labels to original property types
+    ax.set_xticklabels(le_property.inverse_transform(range(len(le_property.classes_))))
+    # ax.set_title("Distribution of Property Types")
+    ax.set_xlabel("Property Type")
+    ax.set_ylabel("Count")
+    charts.append(encode_image(fig))
+
+    # Chart 2: Distribution of Sale Price by Location
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.boxplot(data=df, x='Location', y='Sale Price', ax=ax)
+    # Set x-axis labels to original location names
+    ax.set_xticklabels(le_location.inverse_transform(range(len(le_location.classes_))))
+    # ax.set_title("Distribution of Sale Price by Location")
+    ax.set_xlabel("Location")
+    ax.set_ylabel("Sale Price")
+    charts.append(encode_image(fig))
+
+    # Chart 3: Sales over time
+    df['Sale Date'] = pd.to_datetime(df['Sale Date'])
+    monthly_sales = df.resample('ME', on='Sale Date').size()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    monthly_sales.plot(ax=ax)
+    # ax.set_title("Sales Over Time")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Number of Sales")
+    charts.append(encode_image(fig))
+
+    # Chart 4: Sale Price Distribution by Age Group
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(data=df, x='Age', y='Sale Price', ax=ax)
+    # ax.set_title("Sale Price Distribution by Age Group")
+    ax.set_xlabel("Age")
+    ax.set_ylabel("Sale Price")
+    charts.append(encode_image(fig))
+    
+    return charts
+
+def encode_image(fig):
+    # Save plot as a PNG image and encode in base64
+    buffer = io.BytesIO()
+    fig.savefig(buffer, format='png', bbox_inches='tight')
+    plt.close(fig)
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    return f"data:image/png;base64,{image_base64}"
+
+
+# -------------------------------------------------------
