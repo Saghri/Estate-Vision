@@ -30,7 +30,8 @@ from .forms import RegisterForm
 
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
-from django.contrib.auth.backends import ModelBackend
+from django.shortcuts import render, redirect
+from .forms import RegisterForm
 
 User = get_user_model()
 
@@ -40,22 +41,28 @@ def register_view(request):
         if form.is_valid():
             username = form.cleaned_data.get("username")
             email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password")
+            password1 = form.cleaned_data.get("password1")
+            password2 = form.cleaned_data.get("password2")
             
-            # Create the user
-            user = User.objects.create_user(username=username, email=email, password=password)
-            
-            # Authenticate with the specified backend
-            user.backend = 'django.contrib.auth.backends.ModelBackend'
-            
-            # Login the user
-            login(request, user)
-            
-            return redirect('login')  # Redirect to the dashboard after signup
+            # Check if passwords match
+            if password1 != password2:
+                form.add_error('password2', 'Passwords do not match')
+            else:
+                # Create the user
+                user = User.objects.create_user(username=username, email=email, password=password1)
+                
+                # Authenticate with the specified backend
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                
+                # Login the user
+                login(request, user)
+                
+                return redirect('login')  # Redirect to the login page after signup
     else:
         form = RegisterForm()
     
     return render(request, 'accounts/Signup.html', {'form': form})
+
 
 
 # def login_view(request):
@@ -76,19 +83,30 @@ def register_view(request):
 
 from django.shortcuts import redirect
 
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+
 def login_view(request):
     error_message = None 
-    if request.method == "POST":  
-        email = request.POST.get("email")  
-        password = request.POST.get("password")  
-        user = authenticate(request, email=email, password=password)  # Use email instead of username
-        if user is not None:  
-            login(request, user)  
-            # Redirect to the dashboard page after login
-            return redirect('user_dashboard')  
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        # Find the user by email and pass the username to authenticate()
+        try:
+            user = User.objects.get(email=email)
+            user = authenticate(request, username=user.username, password=password)
+        except User.DoesNotExist:
+            user = None
+
+        if user is not None:
+            login(request, user)
+            return redirect('user_dashboard')
         else:
-            error_message = "Invalid credentials"  
+            error_message = "Invalid credentials"
     return render(request, 'accounts/login.html', {'error': error_message})
+
 
 
 
@@ -102,6 +120,9 @@ def logout_view(request):
 
 def main_page_view(request):
     return render(request, 'myapp/mainpage.html')
+
+def analysis_page_view(request):
+    return render(request, 'myapp/analysis.html')
 
 # Home View
 # Using the decorator 
@@ -123,87 +144,6 @@ class ProtectedView(LoginRequiredMixin, View):
 
 # -------------------------------------------------------
 
-
-# # views.py
-# import pandas as pd
-# from django.http import JsonResponse
-# from django.views.decorators.csrf import csrf_exempt
-# import json
-
-# @csrf_exempt
-# def upload_csv(request):
-#     if request.method == 'POST' and request.FILES.get('csv_file'):
-#         csv_file = request.FILES['csv_file']
-#         df = pd.read_csv(csv_file)
-#         # 
-#         # Process the data and generate default graphs
-#         columns = df.columns.tolist()
-#         default_graphs = generate_default_graphs(df)
-#         quick_analysis = generate_quick_analysis(df)
-        
-#         # Save the DataFrame to the session or database for further analysis
-#         request.session['df'] = df.to_json()
-        
-#         return JsonResponse({
-#             'success': True,
-#             'columns': columns,
-#             'default_graphs': default_graphs,
-#             'quick_analysis': quick_analysis
-#         })
-#     return JsonResponse({'success': False})
-
-# @csrf_exempt
-# def analyze(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-#         algorithm = data.get('algorithm')
-#         graphs = data.get('graphs')
-        
-#         # Retrieve the DataFrame from the session or database
-#         df = pd.read_json(request.session.get('df'))
-        
-#         # Perform analysis based on the selected algorithm and graph types
-#         analysis_results = perform_analysis(df, algorithm, graphs)
-        
-#         return JsonResponse({
-#             'success': True,
-#             'graphs': analysis_results
-#         })
-#     return JsonResponse({'success': False})
-
-# @csrf_exempt
-# def generate_report(request):
-#     if request.method == 'GET':
-#         # Retrieve the DataFrame and analysis results
-#         df = pd.read_json(request.session.get('df'))
-        
-#         # Generate a comprehensive report
-#         report = generate_comprehensive_report(df)
-        
-#         return JsonResponse({
-#             'success': True,
-#             'report': report
-#         })
-#     return JsonResponse({'success': False})
-
-# # Helper functions for data analysis and visualization
-# def generate_default_graphs(df):
-#     # Implement logic to generate default graphs based on the dataset
-#     pass
-
-# def generate_quick_analysis(df):
-#     # Implement logic to generate quick analysis results
-#     pass
-
-# def perform_analysis(df, algorithm, graphs):
-#     # Implement logic to perform analysis based on the selected algorithm and graph types
-#     pass
-
-# def generate_comprehensive_report(df):
-#     # Implement logic to generate a comprehensive report based on the analysis
-#     pass
-
-# ----------------------------------------------------
 
 from django.shortcuts import render
 from django.http import JsonResponse

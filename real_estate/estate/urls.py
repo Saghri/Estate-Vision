@@ -26,6 +26,7 @@ urlpatterns = [
     path('accounts/logout/', views.logout_view, name='logout'),
     path('user_dashboard/', views.dashboard, name='user_dashboard'),
     path('user_dashboard/', views.ProtectedView.as_view(), name='dashboard'),
+    path('analysis_page/', views.analysis_page_view, name='analysis_page'),
 
     path('analyze/', views.analyze_data, name='analyze_data'),
 ]

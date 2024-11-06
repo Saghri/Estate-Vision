@@ -155,8 +155,16 @@ STATICFILES_DIRS = (
 
 LOGIN_REDIRECT_URL = 'user_dashboard'
 
+
+
 # AUTHENTICATION_BACKENDS = ['estate.backends.EmailAuthBackend', 'django.contrib.auth.backends.ModelBackend']
 AUTHENTICATION_BACKENDS = ['estate.backends.EmailAuthBackend', 'django.contrib.auth.backends.ModelBackend']
+
+# AUTHENTICATION_BACKENDS = [
+#     'esate.backends.EmailAuthBackend',  # Replace 'myapp' with your app name
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
+
 
 
 # Default primary key field type

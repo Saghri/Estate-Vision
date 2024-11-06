@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -64,7 +66,7 @@
         border-radius: 4px;
         font-size: 16px;
       }
-      .mic{
+      .mic {
         position: absolute;
       }
       button {
@@ -123,6 +125,18 @@
       <div class="brand">Estate Vision</div>
       <div class="form-container">
         <h2>Register</h2>
+
+        {% comment %} Ensure any form errors display in the template, so you can see the exact issue on the frontend {% endcomment %}
+        {% comment %} {% if form.errors %}
+          <ul class="error-list" style="color: red; font-size: 14px;">
+            {% for field, errors in form.errors.items %}
+              {% for error in errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        {% endif %} {% endcomment %}
+
         <form method="POST" action="{% url 'Signup' %}">
           {% csrf_token %}
           <div class="input-group">
@@ -166,30 +180,34 @@
       </div>
     </div>
     <div class="footer-links">
-      <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
-      <p><a href="#">Forgot Password?</a></p>
+      <p>
+        Already have an account? <a href="{% url 'login' %}">Log in</a>
+      </p>
+      <p>
+        <a href="#">Forgot Password?</a>
+      </p>
     </div>
     <script>
-        function startVoiceInput(inputId) {
-          const inputField = document.getElementById(inputId)
-          const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)()
-        
-          recognition.lang = 'en-US'
-          recognition.interimResults = false
-          recognition.maxAlternatives = 1
-        
-          recognition.start()
-        
-          recognition.onresult = function (event) {
-            let transcript = event.results[0][0].transcript.toLowerCase() // Convert text to lowercase
-            transcript = transcript.replace(/\.$/, '') // Remove any trailing period
-            inputField.value = transcript
-          }
-        
-          recognition.onerror = function (event) {
-            console.error('Error occurred in recognition: ' + event.error)
-          }
+      function startVoiceInput(inputId) {
+        const inputField = document.getElementById(inputId)
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)()
+      
+        recognition.lang = 'en-US'
+        recognition.interimResults = false
+        recognition.maxAlternatives = 1
+      
+        recognition.start()
+      
+        recognition.onresult = function (event) {
+          let transcript = event.results[0][0].transcript.toLowerCase() // Convert text to lowercase
+          transcript = transcript.replace(/\.$/, '') // Remove any trailing period
+          inputField.value = transcript
         }
-      </script>
+      
+        recognition.onerror = function (event) {
+          console.error('Error occurred in recognition: ' + event.error)
+        }
+      }
+    </script>
   </body>
 </html>
