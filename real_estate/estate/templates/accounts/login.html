@@ -127,69 +127,69 @@
   </head>
   <body>
     <div class="container">
-      <div class="brand">Estate Vision</div>
-      <div class="form-container">
-        <h2>Login</h2>
-        <form method="post" action="{% url 'login' %}">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ next }}" />
+        <div class="brand">Estate Vision</div>
+        <div class="form-container">
+            <h2>Login</h2>
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
 
-          <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required />
-            <div class="voice-input-icon" onclick="startVoiceInput('email')">
-              <svg class="mic" viewBox="0 0 24 24">
-                <path d="M12 14a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 14zM19 10.5a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08a7 7 0 0 0 6-6.92z" />
-              </svg>
-            </div>
-          </div>
+                <div class="input-group">
+                    <label for="username">Username or Email</label>
+                    <input type="text" id="username" name="username" required />
+                    <div class="voice-input-icon" onclick="startVoiceInput('username')">
+                        <svg class="mic" viewBox="0 0 24 24">
+                            <path d="M12 14a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 14zM19 10.5a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08a7 7 0 0 0 6-6.92z" />
+                        </svg>
+                    </div>
+                </div>
 
-          <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required />
-            <div class="voice-input-icon" onclick="startVoiceInput('password')">
-              <svg class="mic" viewBox="0 0 24 24">
-                <path d="M12 14a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 14zM19 10.5a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08a7 7 0 0 0 6-6.92z" />
-              </svg>
-            </div>
-          </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required />
+                    <div class="voice-input-icon" onclick="startVoiceInput('password')">
+                        <svg class="mic" viewBox="0 0 24 24">
+                            <path d="M12 14a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 14zM19 10.5a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08a7 7 0 0 0 6-6.92z" />
+                        </svg>
+                    </div>
+                </div>
 
-          <button type="submit">Login</button>
-        </form>
+                <button type="submit">Log In</button>
+            </form>
 
-        {% if error %}
-          <p class="error">{{ error }}</p>
-        {% endif %}
-      </div>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </div>
     </div>
 
     <div class="footer-links">
-      <p>
-        Don't have an account? <a href="{% url 'Signup' %}">Register here</a>
-      </p>
+        <p>
+            Don't have an account? <a href="{% url 'Signup' %}">Register here</a>
+        </p>
     </div>
 
     <script>
-      function startVoiceInput(inputId) {
-        const inputField = document.getElementById(inputId)
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)()
-      
-        recognition.lang = 'en-US'
-        recognition.interimResults = false
-        recognition.maxAlternatives = 1
-      
-        recognition.start()
-      
-        recognition.onresult = function (event) {
-          let transcript = event.results[0][0].transcript.toLowerCase() // Convert text to lowercase
-          transcript = transcript.replace(/\.$/, '') // Remove any trailing period
-          inputField.value = transcript
+        function startVoiceInput(inputId) {
+            const inputField = document.getElementById(inputId);
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                let transcript = event.results[0][0].transcript.toLowerCase(); // Convert text to lowercase
+                transcript = transcript.replace(/\.$/, ''); // Remove any trailing period
+                inputField.value = transcript;
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Error occurred in recognition: ' + event.error);
+            };
         }
-      
-        recognition.onerror = function (event) {
-          console.error('Error occurred in recognition: ' + event.error)
-        }
-      }
     </script>
-  </body>
+</body>
 </html>

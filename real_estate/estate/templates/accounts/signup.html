@@ -125,9 +125,8 @@
       <div class="brand">Estate Vision</div>
       <div class="form-container">
         <h2>Register</h2>
-
-        {% comment %} Ensure any form errors display in the template, so you can see the exact issue on the frontend {% endcomment %}
-        {% comment %} {% if form.errors %}
+    
+        {% if form.errors %}
           <ul class="error-list" style="color: red; font-size: 14px;">
             {% for field, errors in form.errors.items %}
               {% for error in errors %}
@@ -135,8 +134,8 @@
               {% endfor %}
             {% endfor %}
           </ul>
-        {% endif %} {% endcomment %}
-
+        {% endif %}
+    
         <form method="POST" action="{% url 'Signup' %}">
           {% csrf_token %}
           <div class="input-group">
@@ -177,6 +176,9 @@
           </div>
           <button type="submit">Register</button>
         </form>
+        <div class="email-verification-message">
+          <p>After registration, please check your email to verify your account.</p>
+        </div>
       </div>
     </div>
     <div class="footer-links">

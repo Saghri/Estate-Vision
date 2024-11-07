@@ -155,15 +155,21 @@ STATICFILES_DIRS = (
 
 LOGIN_REDIRECT_URL = 'user_dashboard'
 
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jamalsaghri@gmail.com'  # Your full Gmail address
+EMAIL_HOST_PASSWORD = 'otms lefq xpki dkeg'  # The app password you just generated
 
 
 # AUTHENTICATION_BACKENDS = ['estate.backends.EmailAuthBackend', 'django.contrib.auth.backends.ModelBackend']
-AUTHENTICATION_BACKENDS = ['estate.backends.EmailAuthBackend', 'django.contrib.auth.backends.ModelBackend']
 
-# AUTHENTICATION_BACKENDS = [
-#     'esate.backends.EmailAuthBackend',  # Replace 'myapp' with your app name
-#     'django.contrib.auth.backends.ModelBackend',
-# ]
+AUTHENTICATION_BACKENDS = [
+    'estate.backends.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 
 

@@ -14,97 +14,182 @@ from django.contrib.auth.models import User
 from .forms import RegisterForm
 
 
+# # --------------------------------------- Register View
+
+# from django.contrib.auth import login
+# from django.contrib.auth import get_user_model
+# from django.shortcuts import render, redirect
+# from .forms import RegisterForm
+
+# User = get_user_model()
+
 # def register_view(request):
 #     if request.method == "POST":
 #         form = RegisterForm(request.POST)
 #         if form.is_valid():
 #             username = form.cleaned_data.get("username")
 #             email = form.cleaned_data.get("email")
-#             password = form.cleaned_data.get("password")
-#             user = User.objects.create_user(username=username,email=email, password=password)
-#             login(request, user)
-#             return redirect('login')
+#             password1 = form.cleaned_data.get("password1")
+#             password2 = form.cleaned_data.get("password2")
+            
+#             # Check if passwords match
+#             if password1 != password2:
+#                 form.add_error('password2', 'Passwords do not match')
+#             else:
+#                 # Create the user
+#                 user = User.objects.create_user(username=username, email=email, password=password1)
+                
+#                 # Authenticate with the specified backend
+#                 user.backend = 'django.contrib.auth.backends.ModelBackend'
+                
+#                 # Login the user
+#                 login(request, user)
+                
+#                 return redirect('login')  # Redirect to the login page after signup
 #     else:
 #         form = RegisterForm()
-#     return render(request, 'accounts/Signup.html', {'form':form})
+    
+#     return render(request, 'accounts/Signup.html', {'form': form})
 
-from django.contrib.auth import login
-from django.contrib.auth import get_user_model
+
+# # -------------------------Login View
+
+# from django.shortcuts import redirect
+
+# from django.contrib.auth import authenticate, login
+# from django.shortcuts import render, redirect
+# from django.contrib.auth.models import User
+
+# def login_view(request):
+#     error_message = None 
+#     if request.method == "POST":
+#         email = request.POST.get("email")
+#         password = request.POST.get("password")
+
+#         # Find the user by email and pass the username to authenticate()
+#         try:
+#             user = User.objects.get(email=email)
+#             user = authenticate(request, username=user.username, password=password)
+#         except User.DoesNotExist:
+#             user = None
+
+#         if user is not None:
+#             login(request, user)
+#             return redirect('user_dashboard')
+#         else:
+#             error_message = "Invalid credentials"
+#     return render(request, 'accounts/login.html', {'error': error_message})
+
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.crypto import get_random_string
 from .forms import RegisterForm
-
-User = get_user_model()
+from .models import Profile
 
 def register_view(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get("username")
-            email = form.cleaned_data.get("email")
-            password1 = form.cleaned_data.get("password1")
-            password2 = form.cleaned_data.get("password2")
+            user = form.save(commit=False)
+            user.is_active = False  # Deactivate account till it is verified
+            user.save()
+
+            token = get_random_string(length=32)
+            Profile.objects.filter(user=user).update(email_verification_token=token)
+
+            verification_link = f"{request.scheme}://{request.get_host()}/verify-email/{token}/"
+            send_mail(
+                'Verify your email',
+                f'Please click the link to verify your email: {verification_link}',
+                settings.EMAIL_HOST_USER,
+                [user.email],
+                fail_silently=False,
+            )
             
-            # Check if passwords match
-            if password1 != password2:
-                form.add_error('password2', 'Passwords do not match')
-            else:
-                # Create the user
-                user = User.objects.create_user(username=username, email=email, password=password1)
-                
-                # Authenticate with the specified backend
-                user.backend = 'django.contrib.auth.backends.ModelBackend'
-                
-                # Login the user
-                login(request, user)
-                
-                return redirect('login')  # Redirect to the login page after signup
+            return render(request, 'accounts/verification_sent.html')
     else:
         form = RegisterForm()
     
     return render(request, 'accounts/Signup.html', {'form': form})
 
+from django.contrib.auth import login
+from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect
+from .models import Profile
 
+User = get_user_model()
+
+def verify_email(request, token):
+    try:
+        profile = Profile.objects.get(email_verification_token=token)
+        user = profile.user
+        user.is_active = True
+        user.save()
+        profile.email_verified = True
+        profile.email_verification_token = ''
+        profile.save()
+        
+        # Specify the authentication backend
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+        
+        return redirect('user_dashboard')
+    except Profile.DoesNotExist:
+        return render(request, 'accounts/verification_failed.html')
 
 # def login_view(request):
 #     error_message = None 
-#     if request.method == "POST":  
-#         # username = request.POST.get("username")  
-#         email= request.POST.get("email")
-#         password = request.POST.get("password")  
-#         # user = authenticate(request, username=username, password=password)  
-#         user = authenticate(request, email=email, password=password)  
-#         if user is not None:  
-#             login(request, user)  
-#             next_url = request.POST.get('next') or request.GET.get('next') or 'home'  
-#             return redirect(next_url) 
-#         else:
-#             error_message = "Invalid credentials"  
-#     return render(request, 'accounts/login.html', {'error': error_message})
+#     if request.method == "POST":
+#         email = request.POST.get("email")
+#         password = request.POST.get("password")
 
-from django.shortcuts import redirect
+#         try:
+#             user = User.objects.get(email=email)
+#             user = authenticate(request, username=user.username, password=password)
+#             if user is not None:
+#                 if user.profile.email_verified:
+#                     login(request, user)
+#                     return redirect('user_dashboard')
+#                 else:
+#                     error_message = "Please verify your email before logging in."
+#             else:
+#                 error_message = "Invalid credentials"
+#         except User.DoesNotExist:
+#             error_message = "Invalid credentials"
+    
+#     return render(request, 'accounts/login.html', {'error': error_message})
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 
 def login_view(request):
     error_message = None 
     if request.method == "POST":
-        email = request.POST.get("email")
+        username_or_email = request.POST.get("username")  # Assume the form field is named "username"
         password = request.POST.get("password")
 
-        # Find the user by email and pass the username to authenticate()
-        try:
-            user = User.objects.get(email=email)
-            user = authenticate(request, username=user.username, password=password)
-        except User.DoesNotExist:
-            user = None
+        # Try to authenticate with username
+        user = authenticate(request, username=username_or_email, password=password)
+        
+        if user is None:
+            # If username authentication fails, try with email
+            user = authenticate(request, username=username_or_email, password=password)
 
         if user is not None:
-            login(request, user)
-            return redirect('user_dashboard')
+            if user.is_active:
+                if user.profile.email_verified:
+                    login(request, user)
+                    return redirect('user_dashboard')
+                else:
+                    error_message = "Please verify your email before logging in."
+            else:
+                error_message = "Your account is not active. Please check your email for verification."
         else:
             error_message = "Invalid credentials"
+    
     return render(request, 'accounts/login.html', {'error': error_message})
 
 

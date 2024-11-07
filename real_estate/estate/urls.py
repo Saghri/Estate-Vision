@@ -28,5 +28,7 @@ urlpatterns = [
     path('user_dashboard/', views.ProtectedView.as_view(), name='dashboard'),
     path('analysis_page/', views.analysis_page_view, name='analysis_page'),
 
+    path('verify-email/<str:token>/', views.verify_email, name='verify_email'),
+
     path('analyze/', views.analyze_data, name='analyze_data'),
 ]
